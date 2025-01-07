@@ -1,12 +1,11 @@
-.dir-locals.el
-# Local Netlify folder
-.netlify
+.wasp/
+node_modules/
 
-# editor related
-.idea/
-*.swo
-*.swp
+# Ignore all dotenv files by default to prevent accidentally committing any secrets.
+# To include specific dotenv files, use the `!` operator or adjust these rules.
+.env
+.env.*
 
-# macOS related
-.DS_Store
-.vscode/
+# Don't ignore example dotenv files.
+!.env.example
+!.env.*.example
