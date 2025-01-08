@@ -1,0 +1,131 @@
+# ------------------------------------------------------------------------------
+# Virtual Consultant Platform - Agent Configuration
+# ------------------------------------------------------------------------------
+# This TOML file defines the configuration for each AI sub-agent, along with core
+# system settings and integration details. It leverages both WASP (DSL for
+# building full-stack web apps) and Eliza (AI agent framework).
+#
+# Usage:
+# 1. Adjust 'enabled' fields to activate or deactivate specific agents.
+# 2. Provide necessary environment variables (API keys, DB URLs, etc.).
+# 3. Align 'phase' with the current development stage.
+# ------------------------------------------------------------------------------
+
+[project]
+name = "Virtual Consultant Platform"
+description = "A comprehensive suite of AI-driven services for research, content generation, and social media management."
+phase = "Phase 1 - Infrastructure Setup"
+version = "0.1.0"
+
+[project.infrastructure]
+monorepo = true
+cicd_pipeline = true
+
+# ------------------------------------------------------------------------------
+# Agents Definition
+# ------------------------------------------------------------------------------
+[agents]
+
+# Main AI Orchestrator
+[agents.elizaOS]
+enabled = true
+role = "orchestrator"
+description = "Central orchestrator agent responsible for spawning sub-agents, managing tasks, and overseeing the entire lifecycle."
+
+# Automated Research Sub-Agent
+[agents.gpt_researcher]
+enabled = true
+role = "research"
+description = "Performs automated research tasks, including competitor scans and data gathering via GPT-based queries."
+dependencies = ["agent_memory"]
+
+# Long-Term Memory Agent
+[agents.agent_memory]
+enabled = true
+role = "memory"
+description = "Maintains contextual state and conversation history for all agents, ensuring consistency across sessions."
+
+# Automated Social Media Client
+[agents.agent_twitter_client]
+enabled = true
+role = "social_media"
+description = "Posts content to Twitter (X) and handles basic social media scheduling/automation."
+api_key_env = "ENV_TWITTER_API_KEY"
+api_secret_env = "ENV_TWITTER_API_SECRET"
+
+# Slide Deck Content Generation
+[agents.powerpointer]
+enabled = true
+role = "content_generation"
+description = "Generates PowerPoint-like presentations based on structured or unstructured input data."
+
+# Twitter Scraper for Fine-Tuning
+[agents.twitter_scraper_finetune]
+enabled = true
+role = "data_harvesting"
+description = "Scrapes tweets for dataset creation and language model fine-tuning. Integrates with GPT Researcher."
+
+# ------------------------------------------------------------------------------
+# WASP & Eliza Configuration
+# ------------------------------------------------------------------------------
+[wasp]
+version = "0.15.0"
+auth_methods = ["usernameAndPassword"]
+use_prisma = true
+use_react = true
+
+[eliza]
+version = "0.9.1"
+providers = ["timeProvider", "factsProvider", "boredomProvider"]
+agent_runtime_table = "eliza_runtime"
+memory_manager_table = "eliza_memory"
+description = "Eliza agent framework integration for orchestrating sub-agents and managing conversation state."
+
+# ------------------------------------------------------------------------------
+# Technical Requirements
+# ------------------------------------------------------------------------------
+[requirements]
+python_version = "3.9"
+fastapi_version = "0.88"
+poetry_version = "1.3.2"
+docker_required = true
+github_actions = true
+
+# ------------------------------------------------------------------------------
+# Security & Keys
+# ------------------------------------------------------------------------------
+[security]
+# NOTE: These should be environment variables, not plaintext!
+solana_keypair_path = "ENV_SOLANA_KEYPAIR_PATH"
+private_key_management = "ENV_SECURE_STORE"
+api_keys = "ENV_API_KEYS"
+
+# ------------------------------------------------------------------------------
+# Reporting & Logs
+# ------------------------------------------------------------------------------
+[reporting]
+enable_weekly_reports = true
+enable_realtime_dashboard = true
+log_level = "INFO"
+
+[reporting.alerts]
+budget_threshold = 5000.00
+time_overdue_days = 3
+
+# ------------------------------------------------------------------------------
+# Future Phases & Planned Features
+# ------------------------------------------------------------------------------
+[roadmap]
+phase_2 = "Core Service Development"
+phase_3 = "Integration and Testing"
+phase_4 = "Beta Release"
+phase_5 = "Production Deployment"
+
+[roadmap.future_plans]
+plan1 = "GPT Researcher integration with front-end flows via WASP"
+plan2 = "Advanced analytics and performance tuning"
+plan3 = "Powerpointer user-friendly UI"
+
+# ------------------------------------------------------------------------------
+# End of .TOML Configuration
+# ------------------------------------------------------------------------------
